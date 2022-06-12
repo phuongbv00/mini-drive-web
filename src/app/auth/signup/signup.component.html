@@ -1,0 +1,48 @@
+<form nz-form [formGroup]="form" (ngSubmit)="submit()">
+  <h3 class="text-center mb-7 text-2xl font-light">ĐĂNG KÝ</h3>
+  <nz-form-item>
+    <nz-form-control>
+      <nz-input-group nzSize="large">
+        <input nz-input formControlName="fullName" placeholder="Họ và tên"/>
+      </nz-input-group>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-control>
+      <nz-input-group nzSize="large">
+        <input nz-input formControlName="username" placeholder="Tên đăng nhập"/>
+      </nz-input-group>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-control>
+      <nz-input-group nzSize="large" [nzSuffix]="suffixTemplate">
+        <input [type]="passwordVisible ? 'text' : 'password'" nz-input formControlName="password"
+               placeholder="Mật khẩu"/>
+      </nz-input-group>
+      <ng-template #suffixTemplate>
+        <i nz-icon [nzType]="passwordVisible ? 'eye-invisible' : 'eye'"
+           (click)="passwordVisible = !passwordVisible"></i>
+      </ng-template>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-control>
+      <nz-input-group nzSize="large" [nzSuffix]="suffixTemplate">
+        <input [type]="passwordVisible ? 'text' : 'password'" nz-input formControlName="cnfPassword"
+               placeholder="Xác nhận lại mật khẩu"/>
+      </nz-input-group>
+      <ng-template #suffixTemplate>
+        <i nz-icon [nzType]="passwordVisible ? 'eye-invisible' : 'eye'"
+           (click)="passwordVisible = !passwordVisible"></i>
+      </ng-template>
+    </nz-form-control>
+  </nz-form-item>
+  <div class="flex justify-between">
+    <label nz-checkbox formControlName="policy">
+      <span>Tôi đồng ý với các điều khoản và điều kiện</span>
+    </label>
+  </div>
+  <button nz-button class="w-full mt-5" nzType="primary" nzSize="large" [nzLoading]="isLogging">ĐĂNG KÝ</button>
+  <a routerLink="/auth/signin" class="block mt-4 text-center">Đăng nhập</a>
+</form>

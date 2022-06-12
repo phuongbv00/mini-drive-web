@@ -1,0 +1,11 @@
+::ng-deep .anticon {
+  vertical-align: 0.125rem !important;
+}
+
+::ng-deep .ant-image-preview-img-wrapper {
+  top: 50%;
+  left: 50%;
+  bottom: initial;
+  right: initial;
+  transform: translate(-50%, -50%)!important;
+}

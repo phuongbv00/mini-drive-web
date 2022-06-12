@@ -1,0 +1,23 @@
+.stat-box {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .stat-box {
+    flex-basis: 45%;
+  }
+}
+
+@media (min-width: 1024px) {
+  .stat-box {
+    flex-basis: 20%;
+  }
+}
+
+@media (min-width: 1440px) {
+  .stat-box {
+    flex-basis: 22%;
+  }
+}

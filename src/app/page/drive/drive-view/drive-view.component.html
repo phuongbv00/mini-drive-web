@@ -1,0 +1,146 @@
+<nz-breadcrumb nzSeparator=">" class="mb-2">
+  <nz-breadcrumb-item (click)="openedFolder$.next(null)">
+    <a>
+      <i style="font-size: 1.5rem!important; margin-right: 0.25rem;"
+         nz-icon nzType="folder-open" nzTheme="twotone" nzTwotoneColor="#FBBF24"></i>
+      <span class="text-lg">Thư mục gốc</span>
+    </a>
+  </nz-breadcrumb-item>
+  <nz-breadcrumb-item *ngFor="let f of folderStack" (click)="openedFolder$.next(f)">
+    <a class="text-lg">{{f.name}}</a>
+  </nz-breadcrumb-item>
+</nz-breadcrumb>
+<app-drive-toolbar (afterUpload)="refresh($event)"
+                   (afterCreateFolder)="refresh($event)"
+                   (onTextSearch)="search$.next($event)"
+                   [openedFolder]="openedFolder$ | async"
+                   [statusMode]="statusMode"></app-drive-toolbar>
+<ng-container *ngIf="data && viewMode === 'table'">
+  <nz-table [nzData]="data.files.length > 0 || data.folders.length > 0 ? [1] : []"
+            [nzShowPagination]="false"
+            nzNoResult="Không có dữ liệu"
+            class="mt-2">
+    <thead>
+      <tr>
+        <th class="can-hide">Tên</th>
+        <th class="can-hide">Định dạng</th>
+        <th class="can-hide">Dung lượng</th>
+        <th class="can-hide">Chủ sở hữu</th>
+        <th class="can-hide">Ngày tạo</th>
+        <th class="can-hide" *ngIf="statusMode === resourceStatusEnum.TRASHED">Ngày xóa</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let folder of data.folders"
+          (contextmenu)="openFolderContextMenu($event, folder)"
+          (dblclick)="statusMode === resourceStatusEnum.TRASHED ? viewFolderDetails(folder) : openedFolder$.next(folder)">
+        <td>
+          <i class="text-xl" nz-icon nzType="folder-open" nzTheme="twotone" nzTwotoneColor="#FBBF24"></i>
+          <span class="pl-3">{{ folder.name }}</span>
+        </td>
+        <td class="can-hide">Thư mục</td>
+        <td class="can-hide">_</td>
+        <td class="can-hide">{{ folder.owner.fullName }}</td>
+        <td class="can-hide">{{ folder.createdAt | date: 'dd/MM/yyyy' }}</td>
+        <td class="can-hide" *ngIf="statusMode === resourceStatusEnum.TRASHED">{{ folder.trashedAt | date: 'dd/MM/yyyy' }}</td>
+      </tr>
+      <tr *ngFor="let file of data.files"
+          (contextmenu)="openFileContextMenu($event, file)"
+          (dblclick)="viewDetails(file)">
+        <td>
+          <i class="text-xl" nz-icon [nzType]="getIconByFilename(file.name)" nzTheme="twotone"></i>
+          <span class="pl-3">{{ file.name }}</span>
+        </td>
+        <td class="uppercase can-hide">{{ getExtByFilename(file.name) }}</td>
+        <td class="can-hide">{{ humanFileSize(file.size) }}</td>
+        <td class="can-hide">{{ file.owner.fullName }}</td>
+        <td class="can-hide">{{ file.createdAt | date: 'dd/MM/yyyy' }}</td>
+        <td class="can-hide" *ngIf="statusMode === resourceStatusEnum.TRASHED">{{ file.trashedAt | date: 'dd/MM/yyyy' }}</td>
+      </tr>
+    </tbody>
+  </nz-table>
+</ng-container>
+
+<nz-dropdown-menu #fileMenu="nzDropdownMenu">
+  <ul nz-menu>
+    <ng-container *ngIf="statusMode === resourceStatusEnum.ACTIVE">
+      <li nz-menu-item (click)="previewFile()">
+        <i nz-icon nzType="eye" nzTheme="outline"></i>
+        <span class="pl-2">Xem trước</span>
+      </li>
+      <li nz-menu-item (click)="viewDetails()">
+        <i nz-icon nzType="info-circle" nzTheme="outline"></i>
+        <span class="pl-2">Xem chi tiết</span>
+      </li>
+      <li nz-menu-divider></li>
+      <li nz-menu-item (click)="copyLink()">
+        <i nz-icon nzType="link" nzTheme="outline"></i>
+        <span class="pl-2">Sao chép đường dẫn</span>
+      </li>
+      <li nz-menu-item (click)="downloadFile()">
+        <i nz-icon nzType="download" nzTheme="outline"></i>
+        <span class="pl-2">Tải xuống</span>
+      </li>
+      <li nz-menu-item [nzDisabled]="true">
+        <i nz-icon nzType="heart" nzTheme="outline"></i>
+        <span class="pl-2">Thêm vào mục yêu thích</span>
+      </li>
+      <li nz-menu-item [nzDisabled]="true">
+        <i nz-icon nzType="folder-open" nzTheme="outline"></i>
+        <span class="pl-2">Chuyển đến thư mục</span>
+      </li>
+      <li nz-menu-divider></li>
+      <li nz-menu-item (click)="deleteFile()">
+        <i nz-icon nzType="delete" nzTheme="outline"></i>
+        <span class="pl-2">Chuyển vào thùng rác</span>
+      </li>
+    </ng-container>
+    <ng-container *ngIf="statusMode === resourceStatusEnum.TRASHED">
+      <li nz-menu-item (click)="viewDetails()">
+        <i nz-icon nzType="info-circle" nzTheme="outline"></i>
+        <span class="pl-2">Xem chi tiết</span>
+      </li>
+      <li nz-menu-divider></li>
+      <li nz-menu-item *ngIf="statusMode === resourceStatusEnum.TRASHED" (click)="deleteFile(false)">
+        <i nz-icon nzType="delete" nzTheme="outline"></i>
+        <span class="pl-2">Xóa vĩnh viễn</span>
+      </li>
+    </ng-container>
+  </ul>
+</nz-dropdown-menu>
+
+<nz-dropdown-menu #folderMenu="nzDropdownMenu">
+  <ul nz-menu>
+    <ng-container *ngIf="statusMode === resourceStatusEnum.ACTIVE">
+      <li nz-menu-item (click)="viewFolderDetails()">
+        <i nz-icon nzType="info-circle" nzTheme="outline"></i>
+        <span class="pl-2">Xem chi tiết</span>
+      </li>
+      <li nz-menu-divider></li>
+      <li nz-menu-item [nzDisabled]="true">
+        <i nz-icon nzType="heart" nzTheme="outline"></i>
+        <span class="pl-2">Thêm vào mục yêu thích</span>
+      </li>
+      <li nz-menu-item [nzDisabled]="true">
+        <i nz-icon nzType="folder-open" nzTheme="outline"></i>
+        <span class="pl-2">Chuyển đến thư mục</span>
+      </li>
+      <li nz-menu-divider></li>
+      <li nz-menu-item (click)="deleteFolder()">
+        <i nz-icon nzType="delete" nzTheme="outline"></i>
+        <span class="pl-2">Chuyển vào thùng rác</span>
+      </li>
+    </ng-container>
+    <ng-container *ngIf="statusMode === resourceStatusEnum.TRASHED">
+      <li nz-menu-item (click)="viewFolderDetails()">
+        <i nz-icon nzType="info-circle" nzTheme="outline"></i>
+        <span class="pl-2">Xem chi tiết</span>
+      </li>
+      <li nz-menu-divider></li>
+      <li nz-menu-item (click)="deleteFolder(false)">
+        <i nz-icon nzType="delete" nzTheme="outline"></i>
+        <span class="pl-2">Xóa vĩnh viễn</span>
+      </li>
+    </ng-container>
+  </ul>
+</nz-dropdown-menu>

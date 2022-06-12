@@ -1,0 +1,14 @@
+<div class="flex justify-between lg:gap-10 sm:gap-5 flex-wrap" *ngIf="stat">
+  <div class="stat-box" *ngFor="let s of stat">
+    <div class="flex">
+      <button nz-button nzType="primary" nzSize="large">
+        <i nz-icon [nzType]="s.icon" nzTheme="outline"></i>
+      </button>
+      <div class="pl-3">
+        <label class="block font-bold text-xl">{{s.title}}</label>
+        <label class="block font-bold text-sm text-gray-500">10 GB / 50 GB</label>
+      </div>
+    </div>
+    <nz-progress [nzPercent]="s.percent" [nzShowInfo]="false"></nz-progress>
+  </div>
+</div>

@@ -1,0 +1,13 @@
+.can-hide {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .can-hide {
+    display: table-cell;
+  }
+}
+
+tr {
+  cursor: pointer;
+}

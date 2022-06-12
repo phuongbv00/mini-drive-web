@@ -1,0 +1,27 @@
+<nz-tabset>
+  <nz-tab nzTitle="Tổng quan">
+    <table>
+      <tr>
+        <td class="p-2 text-gray-500">Định dạng:</td>
+        <td class="p-2 uppercase">{{file ? getExtByFilename(file.name) : 'Thư mục'}}</td>
+      </tr>
+      <tr *ngIf="file">
+        <td class="p-2 text-gray-500">Dung lượng:</td>
+        <td class="p-2">{{humanFileSize(file.size)}}</td>
+      </tr>
+      <tr>
+        <td class="p-2 text-gray-500">Chủ sở hữu:</td>
+        <td class="p-2">{{file?.owner?.fullName || folder?.owner?.fullName}}</td>
+      </tr>
+      <tr>
+        <td class="p-2 text-gray-500">Ngày tạo:</td>
+        <td class="p-2">{{(file?.createdAt || folder?.createdAt) | date: 'dd/MM/yyyy HH:mm:ss'}}</td>
+      </tr>
+      <tr *ngIf="file">
+        <td class="p-2 text-gray-500">Số lượt tải:</td>
+        <td class="p-2">{{file.downloadTurns || 0}}</td>
+      </tr>
+    </table>
+  </nz-tab>
+  <nz-tab nzTitle="Lịch sử" [nzDisabled]="true"></nz-tab>
+</nz-tabset>

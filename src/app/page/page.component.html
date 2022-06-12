@@ -1,0 +1,73 @@
+<nz-layout class="app-layout">
+  <nz-sider class="menu-sidebar"
+            nzCollapsible
+            nzWidth="256px"
+            nzBreakpoint="md"
+            [(nzCollapsed)]="isCollapsed"
+            [nzTrigger]="null">
+    <div class="sidebar-logo">
+      <a href="https://ng.ant.design/" target="_blank">
+        <img src="/assets/img/logo-white.png" alt="logo">
+        <h1>{{appName}}</h1>
+      </a>
+    </div>
+    <ul nz-menu nzTheme="dark" nzMode="inline" [nzInlineCollapsed]="isCollapsed">
+      <li nz-menu-item nzMatchRouter routerLink="/page/drive/me">
+        <i nz-icon nzType="inbox" nzTheme="outline"></i>
+        <span>Drive của tôi</span>
+      </li>
+      <li nz-menu-item nzMatchRouter routerLink="/page/drive/favourite" [nzDisabled]="true">
+        <i nz-icon nzType="heart" nzTheme="outline"></i>
+        <span>Mục yêu thích</span>
+      </li>
+      <li nz-menu-item nzMatchRouter routerLink="/page/drive/trash">
+        <i nz-icon nzType="delete" nzTheme="outline"></i>
+        <span>Đã xóa</span>
+      </li>
+      <li nz-menu-item nzMatchRouter routerLink="/page/settings" [nzDisabled]="true">
+        <i nz-icon nzType="setting" nzTheme="outline"></i>
+        <span>Cài đặt</span>
+      </li>
+    </ul>
+  </nz-sider>
+  <nz-layout>
+    <nz-header>
+      <div class="app-header px-6">
+        <span class="header-trigger" (click)="isCollapsed = !isCollapsed">
+            <i class="trigger"
+               nz-icon
+               [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"
+            ></i>
+        </span>
+        <div class="ml-auto flex items-center gap-5">
+          <nz-progress *ngIf="uploading"
+                       [nzPercent]="uploading.progress"
+                       nzType="circle"
+                       [nzWidth]="48"
+                       [nzStatus]="uploading.state === 'FAILED' ? 'exception' : uploading.state === 'DONE' ? 'success' : 'active'"></nz-progress>
+          <nz-avatar nzSize="large" nzShape="square" nzIcon="user" nz-dropdown [nzDropdownMenu]="menuProfile"
+                     nzPlacement="bottomRight" nzTrigger="click"></nz-avatar>
+        </div>
+      </div>
+    </nz-header>
+    <nz-content>
+      <div class="inner-content">
+        <router-outlet></router-outlet>
+      </div>
+    </nz-content>
+  </nz-layout>
+</nz-layout>
+
+<nz-dropdown-menu #menuProfile="nzDropdownMenu">
+  <ul nz-menu>
+    <li nz-menu-item routerLink="/pages/user/profile" [nzDisabled]="true">
+      <i nz-icon nzType="user"></i>
+      <span class="pl-2">Hồ sơ cá nhân</span>
+    </li>
+    <li nz-menu-divider></li>
+    <li nz-menu-item class="text-red-500" (click)="logout()">
+      <i nz-icon nzType="logout"></i>
+      <span class="pl-2">Đăng xuất</span>
+    </li>
+  </ul>
+</nz-dropdown-menu>

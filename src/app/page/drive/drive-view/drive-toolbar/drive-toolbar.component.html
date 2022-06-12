@@ -1,0 +1,33 @@
+<div class="flex gap-2">
+  <nz-upload [nzBeforeUpload]="beforeUploadFile"
+             *ngIf="statusMode !== resourceStatusEnum.TRASHED">
+    <button nz-button nzType="primary">
+      <i nz-icon nzType="upload" nzTheme="outline"></i>
+      Tải lên tệp
+    </button>
+  </nz-upload>
+  <button nz-button nzType="primary"
+          *ngIf="statusMode !== resourceStatusEnum.TRASHED"
+          (click)="isFolderCreateModalVisible = true">
+    <i nz-icon nzType="folder-add" nzTheme="outline"></i>
+    Tạo thư mục
+  </button>
+  <nz-input-group [nzSuffix]="suffixIconSearch" class="flex-grow">
+    <input nz-input placeholder="Tìm kiếm" [formControl]="searchFormControl"/>
+  </nz-input-group>
+  <ng-template #suffixIconSearch>
+    <i nz-icon nzType="search"></i>
+  </ng-template>
+</div>
+
+<nz-modal [(nzVisible)]="isFolderCreateModalVisible"
+          nzTitle="Tạo thư mục"
+          nzOkText="Tạo"
+          nzCancelText="Hủy"
+          (nzOnCancel)="isFolderCreateModalVisible = false"
+          (nzOnOk)="createFolder()">
+  <ng-container *nzModalContent>
+    <input #createFolderInput nz-input [formControl]="folderCreateFormControl"
+           (focus)="createFolderInput.select()">
+  </ng-container>
+</nz-modal>
