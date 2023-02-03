@@ -6,6 +6,7 @@ import {ResourceStatusEnum} from "../../@core/enums/resource-status.enum";
 const routes: Routes = [
   {
     path: '',
+    pathMatch: 'full',
     redirectTo: 'me',
   },
   {
