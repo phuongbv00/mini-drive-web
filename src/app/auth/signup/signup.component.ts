@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {environment} from "../../../environments/environment";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {UntypedFormBuilder, UntypedFormGroup, Validators} from "@angular/forms";
 import {AuthService} from "../auth.service";
 import {NzMessageService} from "ng-zorro-antd/message";
 import {Router} from "@angular/router";
@@ -12,11 +12,11 @@ import {Router} from "@angular/router";
 })
 export class SignupComponent implements OnInit {
   appName = environment.appName;
-  form!: FormGroup;
+  form!: UntypedFormGroup;
   passwordVisible = false;
   isLogging = false;
 
-  constructor(private fb: FormBuilder,
+  constructor(private fb: UntypedFormBuilder,
               private auth: AuthService,
               private message: NzMessageService,
               private router: Router) { }

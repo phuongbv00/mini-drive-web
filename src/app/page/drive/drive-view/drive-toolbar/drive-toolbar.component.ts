@@ -2,7 +2,7 @@ import {Component, OnInit, Output, EventEmitter, Input} from '@angular/core';
 import {NzUploadFile} from "ng-zorro-antd/upload";
 import {DriveService} from "../../../../@core/services/drive.service";
 import {NzMessageService} from "ng-zorro-antd/message";
-import {FormControl} from "@angular/forms";
+import {UntypedFormControl} from "@angular/forms";
 import {FolderDomain} from "../../../../@core/domains/drive/folder.domain";
 import {debounceTime} from "rxjs/operators";
 import {ResourceStatusEnum} from "../../../../@core/enums/resource-status.enum";
@@ -21,8 +21,8 @@ export class DriveToolbarComponent implements OnInit {
   @Input() statusMode!: ResourceStatusEnum;
 
   isFolderCreateModalVisible = false;
-  folderCreateFormControl = new FormControl('Thư mục 1');
-  searchFormControl = new FormControl();
+  folderCreateFormControl = new UntypedFormControl('Thư mục 1');
+  searchFormControl = new UntypedFormControl();
   resourceStatusEnum = ResourceStatusEnum;
 
   constructor(private drive: DriveService,
