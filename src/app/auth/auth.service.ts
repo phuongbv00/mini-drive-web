@@ -45,7 +45,7 @@ export class AuthService {
   }
 
   getToken(): string {
-    return this.cookie.get(TOKEN_KEY);
+    return <string>this.cookie.get(TOKEN_KEY);
   }
 
   getPayload(): { credentials: any, exp: number, sub: string } {
