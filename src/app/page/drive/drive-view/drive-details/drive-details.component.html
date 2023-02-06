@@ -15,7 +15,7 @@
       </tr>
       <tr>
         <td class="p-2 text-gray-500">Ngày tạo:</td>
-        <td class="p-2">{{(file?.createdAt || folder?.createdAt) | date: 'dd/MM/yyyy HH:mm:ss'}}</td>
+        <td class="p-2">{{(file?.createdAt || folder?.createdAt) | date: 'dd/MM/yyyy HH:mm:ss z'}}</td>
       </tr>
       <tr *ngIf="file">
         <td class="p-2 text-gray-500">Số lượt tải:</td>

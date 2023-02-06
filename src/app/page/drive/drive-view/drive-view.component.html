@@ -41,8 +41,8 @@
         <td class="can-hide">Thư mục</td>
         <td class="can-hide">_</td>
         <td class="can-hide">{{ folder.owner.fullName }}</td>
-        <td class="can-hide">{{ folder.createdAt | date: 'dd/MM/yyyy' }}</td>
-        <td class="can-hide" *ngIf="statusMode === resourceStatusEnum.TRASHED">{{ folder.trashedAt | date: 'dd/MM/yyyy' }}</td>
+        <td class="can-hide">{{ folder.createdAt | date: 'dd/MM/yyyy HH:mm:ss z' }}</td>
+        <td class="can-hide" *ngIf="statusMode === resourceStatusEnum.TRASHED">{{ folder.trashedAt | date: 'dd/MM/yyyy HH:mm:ss z' }}</td>
       </tr>
       <tr *ngFor="let file of data.files"
           (contextmenu)="openFileContextMenu($event, file)"
@@ -54,8 +54,8 @@
         <td class="uppercase can-hide">{{ getExtByFilename(file.name) }}</td>
         <td class="can-hide">{{ humanFileSize(file.size) }}</td>
         <td class="can-hide">{{ file.owner.fullName }}</td>
-        <td class="can-hide">{{ file.createdAt | date: 'dd/MM/yyyy' }}</td>
-        <td class="can-hide" *ngIf="statusMode === resourceStatusEnum.TRASHED">{{ file.trashedAt | date: 'dd/MM/yyyy' }}</td>
+        <td class="can-hide">{{ file.createdAt | date: 'dd/MM/yyyy HH:mm:ss z' }}</td>
+        <td class="can-hide" *ngIf="statusMode === resourceStatusEnum.TRASHED">{{ file.trashedAt | date: 'dd/MM/yyyy HH:mm:ss z' }}</td>
       </tr>
     </tbody>
   </nz-table>
