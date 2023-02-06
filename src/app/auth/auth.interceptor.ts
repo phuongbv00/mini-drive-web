@@ -18,6 +18,7 @@ export class AuthInterceptor implements HttpInterceptor {
       headers: new HttpHeaders({
         'Authorization': `Bearer ${this.auth.getToken()}`,
         'Access-Control-Allow-Origin': '*',
+        'Accept-Language': 'vi_VN',
       }),
     });
     return next.handle(request)
